@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/tr2f/workspace/BM/TES_final/lib/libyyjson.a CMakeFiles/yyjson.dir/3rd/yyjson/src/yyjson.c.o
+/usr/bin/ranlib /home/tr2f/workspace/BM/TES_final/lib/libyyjson.a

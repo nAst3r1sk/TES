@@ -1,0 +1,9 @@
+/home/tr2f/workspace/BM/ac (3)/build/CMakeFiles/yyjson.dir
+/home/tr2f/workspace/BM/ac (3)/build/CMakeFiles/debug_config.dir
+/home/tr2f/workspace/BM/ac (3)/build/CMakeFiles/BinanceWebSocketAPI.dir
+/home/tr2f/workspace/BM/ac (3)/build/CMakeFiles/edit_cache.dir
+/home/tr2f/workspace/BM/ac (3)/build/CMakeFiles/rebuild_cache.dir
+/home/tr2f/workspace/BM/ac (3)/build/CMakeFiles/list_install_components.dir
+/home/tr2f/workspace/BM/ac (3)/build/CMakeFiles/install.dir
+/home/tr2f/workspace/BM/ac (3)/build/CMakeFiles/install/local.dir
+/home/tr2f/workspace/BM/ac (3)/build/CMakeFiles/install/strip.dir

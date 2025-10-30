@@ -1,0 +1,93 @@
+## 1. 系统基础配置 (system)
+- name : 系统名称标识
+- version : 系统版本号
+- log_level : 日志级别 (TRACE/DEBUG/INFO/WARN/ERROR/FATAL)
+- max_threads : 系统最大线程数，限制系统总体可使用的最大线程数，包括所有模块的线程池、工作线程、监控线程等
+
+## 2. 信号传递配置
+- signaltrans_mode : 信号传递模式 (0=共享内存, 1=JSON文件)
+- description : 模式说明
+
+## 3. 共享内存配置 (shared_memory_config)
+- buffer_size : 基础缓冲区大小
+- max_signals : 最大信号数量
+- signal_buffer_size : 信号缓冲区大小
+- order_report_buffer_size : 订单回报缓冲区大小
+- cleanup_interval_ms : 清理间隔时间(毫秒)
+
+## 4. JSON文件配置 (json_file_config)
+- position_file : 持仓数据文件路径
+- update_interval_ms : 更新间隔时间(毫秒)
+- tolerance_threshold : 容忍阈值
+
+## 5. 持仓同步配置 (position_sync_config)
+- precision_tolerance : 精度容忍度
+- max_position_diff : 最大持仓差异
+- sync_timeout_ms : 同步超时时间(毫秒)
+
+## 6. 交易配置 (trading)
+- enable_binance_trading : 是否启用Binance交易
+- trading_type : 交易类型 ["spot", "futures"],
+- default_quantity : 默认交易数量
+- max_order_size : 最大订单大小
+- enable_risk_control : 是否启用风险控制
+- enable_position_tracking : 是否启用持仓跟踪
+- enable_algorithm_execution : 是否启用算法执行
+- enable_order_feedback : 是否启用订单回报
+
+## 7. Binance API配置 (binance)
+- api_key : Binance API密钥
+- api_secret : Binance API密码
+- testnet : 是否使用测试网络
+- enable_websocket : 是否启用WebSocket连接
+- enable_user_data_stream : 是否启用用户数据流
+- sync_interval_ms : 同步间隔时间(毫秒)
+- timeout_ms : 请求超时时间(毫秒)
+- baseUrls : WebSocket连接地址配置
+  - spot : 现货交易URL (live/testnet)
+  - futures : 期货交易URL (live/testnet)
+
+## 8. 执行控制器配置 (execution)
+- worker_thread_count : 工作线程数量
+- signal_processing_interval_ms : 信号处理间隔(毫秒)
+- heartbeat_interval_ms : 心跳间隔(毫秒)
+- statistics_update_interval_ms : 统计更新间隔(毫秒)
+
+## 9. TWAP算法配置 (twap_algorithm)
+- quantity_threshold : 数量阈值
+- value_threshold : 价值阈值
+- market_impact_threshold : 市场冲击阈值
+- default_duration_minutes : 默认执行时长(分钟)
+- min_slice_size : 最小切片大小
+- max_slices : 最大切片数量
+- default_participation_rate : 默认参与率
+- max_price_deviation_bps : 最大价格偏差(基点)
+
+## 10. 风险控制配置 (risk_control)
+- max_position_size : 最大持仓大小
+- max_order_size : 最大订单大小
+- max_daily_loss : 最大日损失
+- max_total_exposure : 最大总敞口
+- max_orders_per_second : 每秒最大订单数
+- max_orders_per_minute : 每分钟最大订单数
+
+## 11. 市场数据配置 (market_data)
+- update_interval_ms : 更新间隔(毫秒)
+- price_volatility : 价格波动率，用于模拟市场数据时生成价格波动
+- volume_volatility : 成交量波动率，用于模拟市场数据时生成成交量波动
+- spread_ratio : 价差比率，定义买卖价差占中间价的比例
+- symbols : 交易品种列表
+
+## 12. 日志配置 (logging)
+- file : 日志文件路径
+- console : 是否输出到控制台
+- max_file_size_mb : 最大文件大小(MB)
+- max_files : 最大文件数量
+- async_logging : 是否异步日志
+
+## 13. 监控配置 (monitoring)
+- enable_performance_monitoring : 是否启用性能监控
+- enable_buffer_monitoring : 是否启用缓冲区监控
+- enable_system_monitoring : 是否启用系统监控
+- monitoring_interval_ms : 监控间隔(毫秒)
+- alert_threshold_percent : 告警阈值百分比

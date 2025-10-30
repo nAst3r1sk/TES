@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wall -Wextra -O2 CMakeFiles/debug_config.dir/debug_config.cpp.o CMakeFiles/debug_config.dir/src/config_manager.cpp.o -o bin/debug_config  lib/libyyjson.a 

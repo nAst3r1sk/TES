@@ -1,0 +1,345 @@
+WebSocket API基本信息
+Base url为：wss://ws-fapi.binance.com/ws-fapi/v1
+测试网的Base url为：wss://testnet.binancefuture.com/ws-fapi/v1
+单次连接API有效期仅为24小时;预计在 24 小时标记后断开连接。
+Websocket服务器每3分钟发送一个ping消息。
+如果 websocket 服务器在10分钟内没有收到来自连接的pong frame，则连接将断开。
+当客户收到ping消息，必需尽快回复pong消息，同时payload需要和ping消息一致。
+未经请求的pong消息是被允许的，但是不会保证连接不断开。对于这些pong消息，建议payload为空。
+必须通过获取除签名之外的所有请求参数并按字母顺序按名称排序来生成签名payload
+除非另有说明，否则列表按时间顺序返回。
+除非另有说明，否则所有时间戳均以 UTC 中的毫秒为单位。
+除非另有说明，否则所有字段名称和值均区分大小写。
+INT 参数（如时间戳）应为 JSON 整数，而不是字符串。
+DECIMAL参数（如 price）应为 JSON 字符串，而不是浮点数。
+用户数据流请求 - 您需要建立单独的WebSocket连接来获得 [账户信息推送]
+
+请求示例:
+
+{
+  "id": "9ca10e58-7452-467e-9454-f669bb9c764e",
+  "method": "order.place",
+  "params": {
+    "apiKey": "yeqKcXjtA9Eu4Tr3nJk61UJAGzXsEmFqqfVterxpMpR4peNfqE7Zl7oans8Qj089",
+    "price": "42088.0",
+    "quantity": "0.1",
+    "recvWindow": 5000,
+    "side": "BUY",
+    "signature": "996962a19802b5a09d7bc6ab1524227894533322a2f8a1f8934991689cabf8fe",
+    "symbol": "BTCUSDT",
+    "timeInForce": "GTC",
+    "timestamp": 1705311512994,
+    "type": "LIMIT"
+  }
+}
+
+请求字段:
+
+名称      类型                    是否必需    描述
+id        INT / STRING / null    YES        任意的 ID 用于匹配对请求的响应
+method    STRING                 YES        请求函数名称
+params    OBJECT                 NO         请求参数。如果没有参数可以省略
+请求 id 是任意的。可以使用 UUID、顺次 ID、当前时间戳等。 服务器不会以任何方式解释 id，只是在响应中回显它。
+可以在一个会话中自由重复使用 ID，不过请注意不要一次发送多个具有相同 ID 的请求，因为否则可能无法区分响应。
+请求函数名称可以以显式版本为前缀，例如："v3/order.place"
+params 的顺序不重要。
+
+
+WebSocket API响应格式
+
+响应在 text 帧 中以 JSON 格式返回，每帧一个响应。
+
+成功响应示例:
+
+{
+  "id": "43a3843a-2321-4e45-8f79-351e5c354563",
+  "status": 200,
+  "result": {
+    "orderId": 336829446,
+    "symbol": "BTCUSDT",
+    "status": "NEW",
+    "clientOrderId": "FqEw6cn0vDhrkmfiwLYPeo",
+    "price": "42088.00",
+    "avgPrice": "0.00",
+    "origQty": "0.100",
+    "executedQty": "0.000",
+    "cumQty": "0.000",
+    "cumQuote": "0.00000",
+    "timeInForce": "GTC",
+    "type": "LIMIT",
+    "reduceOnly": false,
+    "closePosition": false,
+    "side": "BUY",
+    "positionSide": "BOTH",
+    "stopPrice": "0.00",
+    "workingType": "CONTRACT_PRICE",
+    "priceProtect": false,
+    "origType": "LIMIT",
+    "priceMatch": "NONE",
+    "selfTradePreventionMode": "NONE",
+    "goodTillDate": 0,
+    "updateTime": 1705385954229
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 2400,
+      "count": 1
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 300,
+      "count": 1
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1200,
+      "count": 0
+    }
+  ]
+}
+
+失败响应示例:
+
+{
+  "id": "5761b939-27b1-4948-ab87-4a372a3f6b72",
+  "status": 400,
+  "error": {
+    "code": -1102,
+    "msg": "Mandatory parameter 'quantity' was not sent, was empty/null, or malformed."
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 2400,
+      "count": 1
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "SECOND",
+      "intervalNum": 10,
+      "limit": 300,
+      "count": 1
+    },
+    {
+      "rateLimitType": "ORDERS",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 1200,
+      "count": 1
+    }
+  ]
+}
+
+响应字段:
+
+名称           类型                   是否必需    描述
+id            INT / STRING / null    YES        与原来请求的ID一样
+status        INT                    YES        响应状态。请看 状态代码
+result        OBJECT / ARRAY         YES        响应内容。请求成功则显示
+error         OBJECT                 YES        错误描述。请求失败则显示
+rateLimits    ARRAY	                 NO         速率限制状态。请看 速率限制
+
+WebSocket API访问限制
+速率限制与 REST API 相同，并且与 REST API 共享。
+WebSocket 握手尝试消耗权重5。
+ping/pong 帧的速率限制：每秒最多5次。
+默认情况下，响应中包含速率限制信息，参见 rateLimits 字段。
+可以通过在连接字符串或单个请求中的 returnRateLimits 布尔参数来控制 rateLimits 字段的可见性。
+例如，使用 wss://ws-fapi.binance.com/ws-fapi/v1?returnRateLimits=false 默认在响应中隐藏 rateLimits。在这样的情况下，您可以在请求中传递额外的 "returnRateLimits": true 参数，当默认隐藏时，就可以在响应中显示速率限制。
+
+WebSocket API连接后进行身份验证
+你可以使用会话身份验证请求对已经建立的连接进行身份验证：
+session.logon – 进行身份验证，或更改与连接相关联的API密钥。
+session.status – 检查连接状态和当前API密钥。
+session.logout – 忘记与连接关联的API密钥。
+
+WebSocket API关于吊销API密钥
+如果在活动会话期间，由于 任何 原因（例如IP地址未被加入白名单、API密钥被删除、API密钥没有正确的权限等），在下一个请求后，会话将被吊销，并显示以下错误消息:
+
+{
+  "id": null,
+  "status": 401,
+  "error": {
+    "code": -2015,
+    "msg": "Invalid API-key, IP, or permissions for action." 
+  }
+}
+
+WebSocket API授权 临时 请求
+WebSocket连接只能通过一个API密钥进行身份验证。 默认情况下，经过身份验证的API密钥将用于需要apiKey参数的请求。 但是，你始终可以为单个请求明确指定apiKey和signature，覆盖已认证的API密钥，以使用不同的API密钥授权特定请求。
+例如，你可能希望用默认密钥来验证 USER_DATA，但在下单时使用TRADE密钥来签名。
+
+WebSocket API身份验证请求
+注意： 仅支持 Ed25519 密钥用于此功能。
+
+用API key登录 (SIGNED)
+请求
+
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "method": "session.logon",
+  "params": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "signature": "1cf54395b336b0a9727ef27d5d98987962bc47aca6e13fe978612d0adee066ed",
+    "timestamp": 1649729878532
+  }
+}
+
+响应:
+
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "status": 200,
+  "result": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "authorizedSince": 1649729878532,
+    "connectedSince": 1649729873021,
+    "returnRateLimits": false,
+    "serverTime": 1649729878630
+  }
+}
+
+使用提供的API密钥进行WebSocket连接身份验证。
+
+在调用session.logon后，将来的需要apiKey和signature参数的请求可以省略它们。
+
+请注意，只能认证一个API密钥。 多次调用session.logon将更改当前已认证的API密钥。
+
+权重: 2
+
+参数:
+
+参数名         类型      是否必需    描述
+apiKey        STRING    YES	
+recvWindow    INT       NO         The value cannot be greater than 60000
+signature     STRING    YES	
+timestamp     INT       YES	
+数据源: 缓存
+
+查询会话状态
+请求
+
+{
+  "id": "b50c16cd-62c9-4e29-89e4-37f10111f5bf",
+  "method": "session.status"
+}
+
+响应:
+
+{
+  "id": "b50c16cd-62c9-4e29-89e4-37f10111f5bf",
+  "status": 200,
+  "result": {
+    // 如果连接未经身份验证，"apiKey" 和 "authorizedSince" 将显示为 null。
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A",
+    "authorizedSince": 1649729878532,
+    "connectedSince": 1649729873021,
+    "returnRateLimits": false,
+    "serverTime": 1649730611671
+  }
+}
+
+查询WebSocket连接的状态，检查用于授权请求的API密钥（如果有的话）。
+
+权重: 2
+
+参数: NONE
+
+数据源: 缓存
+
+退出会话
+请求
+
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "method": "session.logout"
+}
+
+响应:
+
+{
+  "id": "c174a2b1-3f51-4580-b200-8528bd237cb7",
+  "status": 200,
+  "result": {
+    "apiKey": null,
+    "authorizedSince": null,
+    "connectedSince": 1649729873021,
+    "returnRateLimits": false,
+    "serverTime": 1649730611671
+  }
+}
+
+忘记之前认证的API密钥。 如果连接未经身份验证，此请求不会有任何作用。
+
+请注意，session.logout请求后，WebSocket连接仍然保持打开状态。 你可以继续使用连接，但现在必须在需要的地方明确提供apiKey和signature参数。
+
+权重: 2
+
+参数: NONE
+
+数据源: 缓存
+
+SIGNED (TRADE and USER_DATA) 请求安全
+SIGNED 请求示例 (Ed25519)
+*我们建议使用 Ed25519 API keys**，因为它在所有受支持的 API key 类型中提供最佳性能和安全性。
+参数            取值
+symbol         BTCUSDT
+side           SELL
+type           LIMIT
+timeInForce    GTC
+quantity       1
+price          0.2
+timestamp      1668481559918
+
+#!/usr/bin/env python3
+import base64
+import time
+import json
+from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from websocket import create_connection
+# 设置身份验证：
+API_KEY='替换成您的 API Key'
+PRIVATE_KEY_PATH='test-prv-key.pem'
+# 加载 private key。
+# 在这个例子中，private key 没有加密，但我们建议使用强密码以提高安全性。
+with open(PRIVATE_KEY_PATH, 'rb') as f:
+    private_key = load_pem_private_key(data=f.read(), password=None)
+# 设置请求参数：
+params = {
+    'apiKey':        API_KEY,	
+    'symbol':       'BTCUSDT',
+    'side':         'SELL',
+    'type':         'LIMIT',
+    'timeInForce':  'GTC',
+    'quantity':     '1.0000000',
+    'price':        '0.20'
+}
+# 参数中加时间戳：
+timestamp = int(time.time() * 1000) # 以毫秒为单位的 UNIX 时间戳
+params['timestamp'] = timestamp
+# 参数中加签名：
+payload = '&'.join([f'{param}={value}' for param, value in sorted(params.items())])
+signature = base64.b64encode(private_key.sign(payload.encode('ASCII')))
+params['signature'] = signature.decode('ASCII')
+# 发送请求：
+request = {	
+    'id': 'my_new_order',	
+    'method': 'order.place',	
+    'params': params
+}
+ws = create_connection('wss://ws-fapi.binance.com/ws-fapi/v1')	
+ws.send(json.dumps(request))	
+result =  ws.recv()	
+ws.close()	
+print(result)
+
+右边有 Python 脚本来示例如何使用 Ed25519 key 签名。

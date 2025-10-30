@@ -1,0 +1,2 @@
+/usr/bin/ar qc lib/libyyjson.a CMakeFiles/yyjson.dir/3rd/yyjson/src/yyjson.c.o
+/usr/bin/ranlib lib/libyyjson.a

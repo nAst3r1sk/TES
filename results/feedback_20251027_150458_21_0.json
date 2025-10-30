@@ -1,0 +1,31 @@
+[
+  {
+    "change_quantity": "0.000000",
+    "current_quantity": "0.000000",
+    "error_message": "",
+    "id": 1,
+    "symbol": "BTCUSDT"
+  },
+  {
+    "change_quantity": "0.000000",
+    "current_quantity": "0.000000",
+    "error_message": "",
+    "id": 2,
+    "symbol": "COAIUSDT"
+  },
+  {
+    "change_quantity": "0.000000",
+    "current_quantity": "0.000000",
+    "error_message": "",
+    "id": 3,
+    "symbol": "FORMUSDT"
+  },
+  {
+    "error_total": 0,
+    "isFinished": 1,
+    "longtarget": 0.0,
+    "shorttarget": 0.0,
+    "targetvalue": 0.0,
+    "update_timestamp": 1761548661.0
+  }
+]

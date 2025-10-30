@@ -1,0 +1,2 @@
+/usr/bin/ar qc /home/tr2f/workspace/BM/TES_final/lib/libtes_utils.a CMakeFiles/tes_utils.dir/websocket_client.cpp.o
+/usr/bin/ranlib /home/tr2f/workspace/BM/TES_final/lib/libtes_utils.a

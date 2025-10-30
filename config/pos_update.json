@@ -1,0 +1,21 @@
+[
+  {
+    "id": 1,
+    "quantity": "0.000",
+    "symbol": "BTCUSDT"
+  },
+  {
+    "id": 2,
+    "quantity": "0.0",
+    "symbol": "COAIUSDT"
+  },
+  {
+    "id": 3,
+    "quantity": "0.0",
+    "symbol": "FORMUSDT"
+  },
+  {
+    "isFinished": 1,
+    "update_timestamp": 1761548698
+  }
+]

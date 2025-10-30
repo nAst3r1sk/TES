@@ -1,0 +1,2 @@
+/usr/bin/ar qc libtes_utils.a CMakeFiles/tes_utils.dir/websocket_client.cpp.o
+/usr/bin/ranlib libtes_utils.a

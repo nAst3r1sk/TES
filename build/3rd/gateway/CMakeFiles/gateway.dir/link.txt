@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../../lib/libgateway.a CMakeFiles/gateway.dir/src/config_manager.cpp.o CMakeFiles/gateway.dir/src/binance_websocket.cpp.o
+/usr/bin/ranlib ../../lib/libgateway.a

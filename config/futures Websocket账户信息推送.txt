@@ -1,0 +1,617 @@
+账户信息流连接
+本篇所列出REST接口的baseurl https://fapi.binance.com
+
+用于订阅账户数据的 listenKey 从创建时刻起有效期为60分钟
+
+可以通过PUT一个listenKey延长60分钟有效期，如收到-1125报错提示此listenKey不存在，建议重新使用POST /fapi/v1/listenKey生成listenKey
+
+可以通过DELETE一个 listenKey 立即关闭当前数据流，并使该listenKey 无效
+
+在具有有效listenKey的帐户上执行POST将返回当前有效的listenKey并将其有效期延长60分钟
+
+本篇所列出的websocket接口，连接方式如下：
+
+Base Url: wss://fstream.binance.com
+订阅账户数据流的stream名称为 /ws/`<listenKey>`
+连接样例：
+wss://fstream.binance.com/ws/XaEAKTsQSRLZAGH9tuIu37plSRsdjmlAVBoNYPUITlTAko1WI22PgmBMpI1rS8Yh
+每个链接有效期不超过24小时，请妥善处理断线重连。
+
+单一账户，单一连接的推送数据流消息可以保证时间序; 强烈建议您使用 E 字段进行排序
+
+考虑到剧烈行情下, RESTful接口可能存在查询延迟，我们强烈建议您优先从Websocket user data stream推送的消息来获取订单，仓位等信息。
+
+
+
+生成listenKey (USER_STREAM)
+接口描述
+创建一个新的user data stream，返回值为一个listenKey，即websocket订阅的stream名称。如果该帐户具有有效的listenKey，则将返回该listenKey并将其有效期延长60分钟。
+
+HTTP请求
+POST /fapi/v1/listenKey
+
+请求权重
+1
+
+请求参数
+None
+
+响应示例
+{
+  "listenKey": "pqia91ma19a5s61cv6a81va65sdf19v8a65a1a5s61cv6a81va65sdf19v8a65a1"
+}
+
+
+
+延长listenKey有效期(USER_STREAM)
+接口描述
+有效期延长至本次调用后60分钟
+
+HTTP请求
+PUT /fapi/v1/listenKey
+
+请求权重
+1
+
+请求参数
+None
+
+{
+    "listenKey": "3HBntNTepshgEdjIwSUIBgB9keLyOCg5qv3n6bYAtktG8ejcaW5HXz9Vx1JgIieg" // 被延长的listenkey
+}
+
+
+
+关闭listenKey (USER_STREAM)
+接口描述
+关闭某账户数据流
+
+HTTP请求
+DELETE /fapi/v1/listenKey
+
+请求权重
+1
+
+请求参数
+None
+
+响应示例
+{}
+
+
+
+Websocket API生成listenKey (USER_STREAM)
+接口描述
+创建一个新的user data stream，返回值为一个listenKey，即websocket订阅的stream名称。如果该帐户具有有效的listenKey，则将返回该listenKey并将其有效期延长60分钟。
+
+方式
+userDataStream.start
+
+请求
+{
+  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
+  "method": "userDataStream.start",
+  "params": {
+    "apiKey": "vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A"
+  }
+}
+
+请求权重
+1
+
+请求参数
+名称    类型    是否必需    描述
+apiKey    STRING    YES	
+响应示例
+{
+  "id": "d3df8a61-98ea-4fe0-8f4e-0fcea5d418b0",
+  "status": 200,
+  "result": {
+    "listenKey": "xs0mRXdAKlIPDRFrlPcw0qI41Eh3ixNntmymGyhrhgqo7L6FuLaWArTD7RLP"
+  },
+   "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 2400,
+      "count": 2
+    }
+  ]
+}
+
+
+
+Websocket API延长listenKey有效期(USER_STREAM)
+接口描述
+有效期延长至本次调用后60分钟
+
+方式
+userDataStream.ping
+
+请求
+{
+  "id": "815d5fce-0880-4287-a567-80badf004c74",
+  "method": "userDataStream.ping",
+  "params": {
+    "apiKey": "vmPUZE6mv9SD5VNHk9HlWFsOr9aLE2zvsw0MuIgwCIPy8atIco14y7Ju91duEh8A"
+   }
+}
+
+请求权重
+1
+
+请求参数
+None
+
+响应示例
+{
+  "id": "815d5fce-0880-4287-a567-80badf004c74",
+  "status": 200,
+  "result": {
+    "listenKey": "3HBntNTepshgEdjIwSUIBgB9keLyOCg5qv3n6bYAtktG8ejcaW5HXz9Vx1JgIieg"
+  },
+  "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 2400,
+      "count": 2
+    }
+  ]
+}
+
+
+
+Websocket API关闭listenKey (USER_STREAM)
+接口描述
+关闭某账户数据流
+
+方式
+userDataStream.stop
+
+请求
+{
+  "id": "819e1b1b-8c06-485b-a13e-131326c69599",
+  "method": "userDataStream.stop",
+  "params": {
+    "apiKey": "vmPUZE6mv9SD5VNHk9HlWFsOr9aLE2zvsw0MuIgwCIPy8atIco14y7Ju91duEh8A"
+  }
+}
+
+请求权重
+1
+
+请求参数
+None
+
+响应示例
+{
+  "id": "819e1b1b-8c06-485b-a13e-131326c69599",
+  "status": 200,
+  "result": {},
+   "rateLimits": [
+    {
+      "rateLimitType": "REQUEST_WEIGHT",
+      "interval": "MINUTE",
+      "intervalNum": 1,
+      "limit": 2400,
+      "count": 2
+    }
+  ]
+}
+
+
+
+listenKey过期推送
+事件描述
+当前连接使用的有效listenKey过期时，user data stream 将会推送此事件。
+
+注意:
+
+此事件与 websocket 连接中断没有必然联系
+只有正在连接中的有效listenKey过期时才会收到此消息
+收到此消息后 user data stream 将不再更新，直到用户使用新的有效的listenKey
+事件类型
+listenKeyExpired
+
+响应示例
+{
+    "e": "listenKeyExpired",    // 事件类型
+    "E": "1736996475556",       // 事件时间
+    "listenKey":"WsCMN0a4KHUPTQuX6IUnqEZfB1inxmv1qR4kbf1LuEjur5VdbzqvyxqG9TSjVVxv"
+}
+
+
+
+Balance 和 Position 更新推送
+事件描述
+账户更新事件的 event type 固定为 ACCOUNT_UPDATE
+
+当账户信息有变动时，会推送此事件：
+
+仅当账户信息有变动时(包括资金、仓位、保证金模式等发生变化)，才会推送此事件；
+订单状态变化没有引起账户和持仓变化的，不会推送此事件；
+position 信息：仅当 symbol 仓位有变动时推送。
+"FUNDING FEE" 引起的资金余额变化，仅推送简略事件：
+
+当用户某全仓持仓发生"FUNDING FEE"时，事件ACCOUNT_UPDATE将只会推送相关的用户资产余额信息B(仅推送 FUNDING FEE 发生相关的资产余额信息)，而不会推送任何持仓信息P。
+当用户某逐仓仓持仓发生"FUNDING FEE"时，事件ACCOUNT_UPDATE将只会推送相关的用户资产余额信息B(仅推送"FUNDING FEE"所使用的资产余额信息)，和相关的持仓信息P(仅推送这笔"FUNDING FEE"发生所在的持仓信息)，其余持仓信息不会被推送。
+字段"m"代表了事件推出的原因，包含了以下可能类型:
+
+DEPOSIT
+WITHDRAW
+ORDER
+FUNDING_FEE
+WITHDRAW_REJECT
+ADJUSTMENT
+INSURANCE_CLEAR
+ADMIN_DEPOSIT
+ADMIN_WITHDRAW
+MARGIN_TRANSFER
+MARGIN_TYPE_CHANGE
+ASSET_TRANSFER
+OPTIONS_PREMIUM_FEE
+OPTIONS_SETTLE_PROFIT
+AUTO_EXCHANGE
+COIN_SWAP_DEPOSIT
+COIN_SWAP_WITHDRAW
+字段"bc"代表了钱包余额的改变量，即 balance change，但注意其不包含仓位盈亏及交易手续费。
+
+事件类型
+ACCOUNT_UPDATE
+
+响应示例
+{
+  "e": "ACCOUNT_UPDATE",				// 事件类型
+  "E": 1564745798939,            		// 事件时间
+  "T": 1564745798938 ,           		// 撮合时间
+  "a":                          		// 账户更新事件
+    {
+      "m":"ORDER",						// 事件推出原因
+      "B":[                     		// 余额信息
+        {
+          "a":"USDT",           		// 资产名称
+          "wb":"122624.12345678",    	// 钱包余额
+          "cw":"100.12345678",			// 除去逐仓仓位保证金的钱包余额
+          "bc":"50.12345678"			// 除去盈亏与交易手续费以外的钱包余额改变量
+        },
+        {
+          "a":"BUSD",
+          "wb":"1.00000000",
+          "cw":"0.00000000",
+          "bc":"-49.12345678"
+        }
+      ],
+      "P":[
+       {
+          "s":"BTCUSDT",          	// 交易对
+          "pa":"0",               	// 仓位
+          "ep":"0.00000",            // 入仓价格
+          "bep":"0",                // 盈亏平衡价
+          "cr":"200",             	// (费前)累计实现损益
+          "up":"0",						// 持仓未实现盈亏
+          "mt":"isolated",				// 保证金模式
+          "iw":"0.00000000",			// 若为逐仓，仓位保证金
+          "ps":"BOTH"					// 持仓方向
+       }，
+       {
+        	"s":"BTCUSDT",
+        	"pa":"20",
+        	"ep":"6563.66500",
+        	"bep":"6563.6",
+        	"cr":"0",
+        	"up":"2850.21200",
+        	"mt":"isolated",
+        	"iw":"13200.70726908",
+        	"ps":"LONG"
+      	 },
+       {
+        	"s":"BTCUSDT",
+        	"pa":"-10",
+        	"ep":"6563.86000",
+        	"bep":"6563.6",
+        	"cr":"-45.04000000",
+        	"up":"-1423.15600",
+        	"mt":"isolated",
+        	"iw":"6570.42511771",
+        	"ps":"SHORT"
+       }
+      ]
+    }
+}
+
+
+
+追加保证金通知
+事件描述
+当用户持仓风险过高，会推送此消息。
+此消息仅作为风险指导信息，不建议用于投资策略。
+在大波动市场行情下，不排除此消息发出的同时用户仓位已被强平的可能。
+事件类型
+MARGIN_CALL
+
+响应示例
+{
+    "e":"MARGIN_CALL",    	// 事件类型
+    "E":1587727187525,		// 事件时间
+    "cw":"3.16812045",		// 除去逐仓仓位保证金的钱包余额, 仅在全仓 margin call 情况下推送此字段
+    "p":[					// 涉及持仓
+      {
+        "s":"ETHUSDT",		// symbol
+        "ps":"LONG",		// 持仓方向
+        "pa":"1.327",		// 仓位
+        "mt":"CROSSED",		// 保证金模式
+        "iw":"0",			// 若为逐仓，仓位保证金
+        "mp":"187.17127",	// 标记价格
+        "up":"-1.166074",	// 未实现盈亏
+        "mm":"1.614445"		// 持仓需要的维持保证金
+      }
+    ]
+}
+
+
+
+订单交易更新推送
+事件描述
+当有新订单创建、订单有新成交或者新的状态变化时会推送此类事件 事件类型统一为 ORDER_TRADE_UPDATE
+
+订单方向
+
+BUY 买入
+SELL 卖出
+订单类型
+
+LIMIT 限价单
+MARKET 市价单
+STOP 止损限价单
+STOP_MARKET 止损市价单
+TAKE_PROFIT 止盈限价单
+TAKE_PROFIT_MARKET 止盈市价单
+TRAILING_STOP_MARKET 跟踪止损单
+LIQUIDATION 爆仓
+本次事件的具体执行类型
+
+NEW
+CANCELED 已撤
+CALCULATED 订单 ADL 或爆仓
+EXPIRED 订单失效
+TRADE 交易
+AMENDMENT 订单修改
+订单状态
+
+NEW
+PARTIALLY_FILLED
+FILLED
+CANCELED
+EXPIRED
+EXPIRED_IN_MATCH
+有效方式:
+
+GTC
+IOC
+FOK
+GTX
+强平和ADL:
+
+若用户因保证金不足发生强平：
+c为"autoclose-XXX"，X为"NEW"
+若用户保证金充足但被 ADL:
+c为“adl_autoclose”，X为“NEW”
+事件类型
+ORDER_TRADE_UPDATE
+
+响应示例
+{
+  "e":"ORDER_TRADE_UPDATE",			// 事件类型
+  "E":1568879465651,				    // 事件时间
+  "T":1568879465650,				    // 撮合时间
+  "o":{
+    "s":"BTCUSDT",					    // 交易对
+    "c":"TEST",						      // 客户端自定订单ID
+      // 特殊的自定义订单ID:
+      // "autoclose-"开头的字符串: 系统强平订单
+      // "adl_autoclose": ADL自动减仓订单
+      // "settlement_autoclose-": 下架或交割的结算订单
+    "S":"SELL",						      // 订单方向
+    "o":"TRAILING_STOP_MARKET",	// 订单类型
+    "f":"GTC",						      // 有效方式
+    "q":"0.001",					      // 订单原始数量
+    "p":"0",						        // 订单原始价格
+    "ap":"0",						        // 订单平均价格
+    "sp":"7103.04",			        // 条件订单触发价格，对追踪止损单无效
+    "x":"NEW",						      // 本次事件的具体执行类型
+    "X":"NEW",						      // 订单的当前状态
+    "i":8886774,					      // 订单ID
+    "l":"0",						        // 订单末次成交量
+    "z":"0",						        // 订单累计已成交量
+    "L":"0",						        // 订单末次成交价格
+    "N": "USDT",                // 手续费资产类型
+    "n": "0",                   // 手续费数量
+    "T":1568879465650,				  // 成交时间
+    "t":0,							        // 成交ID
+    "b":"0",						        // 买单净值
+    "a":"9.91",						      // 卖单净值
+    "m": false,					        // 该成交是作为挂单成交吗？
+    "R":false	,				          // 是否是只减仓单
+    "wt": "CONTRACT_PRICE",	    // 触发价类型
+    "ot": "TRAILING_STOP_MARKET",	// 原始订单类型
+    "ps":"LONG"						      // 持仓方向
+    "cp":false,						      // 是否为触发平仓单; 仅在条件订单情况下会推送此字段
+    "AP":"7476.89",					    // 追踪止损激活价格, 仅在追踪止损单时会推送此字段
+    "cr":"5.0",						      // 追踪止损回调比例, 仅在追踪止损单时会推送此字段
+    "pP": false,                // 是否开启条件单触发保护
+    "si": 0,                    // 忽略
+    "ss": 0,                    // 忽略
+    "rp":"0",					          // 该交易实现盈亏
+    "V":"EXPIRE_TAKER",         // 自成交防止模式
+    "pm":"OPPONENT",            // 价格匹配模式
+    "gtd":0                     // TIF为GTD的订单自动取消时间
+  }
+}
+
+
+
+精简交易推送
+精简交易推送相比原有的ORDER_TRADE_UPDATE流减少了数据延迟，但该交易推送仅推送和交易相关的字段。
+
+事件类型
+TRADE_LITE
+
+响应示例
+{
+  "e":"TRADE_LITE",             // 事件类型
+  "E":1721895408092,            // 事件时间
+  "T":1721895408214,            // 交易时间
+  "s":"BTCUSDT",                // 交易对
+  "q":"0.001",                  // 订单原始数量
+  "p":"0",                      // 订单原始价格
+  "m":false,                    // 该成交是作为挂单成交吗？
+  "c":"z8hcUoOsqEdKMeKPSABslD", // 客户端自定订单ID
+      // 特殊的自定义订单ID:
+      // "autoclose-"开头的字符串: 系统强平订单
+      // "adl_autoclose": ADL自动减仓订单
+      // "settlement_autoclose-": 下架或交割的结算订单
+  "S":"BUY",                    // 订单方向
+  "L":"64089.20",               // 订单末次成交价格
+  "l":"0.040",                  // 订单末次成交量
+  "t":109100866,                // 成交ID
+  "i":8886774,                  // 订单ID
+}
+
+
+
+杠杆倍数等账户配置 更新推送
+事件描述
+当账户配置发生变化时会推送此类事件类型统一为ACCOUNT_CONFIG_UPDATE 当交易对杠杆倍数发生变化时推送消息体会包含对象ac表示交易对账户配置，其中s代表具体的交易对，l代表杠杆倍数 当用户联合保证金状态发生变化时推送消息体会包含对象ai表示用户账户配置，其中j代表用户联合保证金状态
+
+事件类型
+ACCOUNT_CONFIG_UPDATE
+
+响应示例
+Payload:
+
+{
+    "e":"ACCOUNT_CONFIG_UPDATE",       // 事件类型
+    "E":1611646737479,		           // 事件时间
+    "T":1611646737476,		           // 撮合时间
+    "ac":{
+    "s":"BTCUSDT",					   // 交易对
+    "l":25						       // 杠杆倍数
+    }
+}
+
+
+Or
+
+{
+    "e":"ACCOUNT_CONFIG_UPDATE",       // 事件类型
+    "E":1611646737479,		           // 事件时间
+    "T":1611646737476,		           // 撮合时间
+    "ai":{							   // 用户账户配置
+    "j":true						   // 联合保证金状态
+    }
+}
+
+
+
+策略交易更新推送
+事件描述
+STRATEGY_UPDATE 在策略交易创建、取消、失效等等时候更新。
+
+策略状态
+
+NEW
+WORKING
+CANCELLED
+EXPIRED
+opCode
+
+8001: 策略参数更改
+8002: 用户取消策略
+8003: 用户手动新增或取消订单
+8004: 达到 stop limit
+8005: 用户仓位爆仓
+8006: 已达最大可挂单数量
+8007: 新增网格策略
+8008: 保证金不足
+8009: 价格超出范围
+8010: 市场非交易状态
+8011: 关仓失败，平仓单无法成交
+8012: 超过最大可交易名目金额
+8013: 不符合网格交易身份
+8014: 不符合 Futures Trading Quantitative Rules，策略终止
+8015: 无仓位或是仓位已经爆仓
+事件类型
+STRATEGY_UPDATE
+
+响应示例
+{
+	"e": "STRATEGY_UPDATE", // 事件类型
+	"T": 1669261797627, // 撮合时间
+	"E": 1669261797628, // 事件时间
+	"su": {
+			"si": 176054594, // 策略 ID
+			"st": "GRID", // 策略类型
+			"ss": "NEW", // 策略状态
+			"s": "BTCUSDT", // 交易对
+			"ut": 1669261797627, // 更新时间
+			"c": 8007 // opCode
+		}
+}
+
+
+
+网格更新推送
+事件描述
+GRID_UPDATE 在网格子订单有部份或是完全成交时更新。
+
+策略状态
+
+NEW
+WORKING
+CANCELLED
+EXPIRED
+事件类型
+GRID_UPDATE
+
+响应示例
+{
+	"e": "GRID_UPDATE", // 事件类型
+	"T": 1669262908216, // 撮合时间
+	"E": 1669262908218, // 事件时间
+	"gu": {
+			"si": 176057039, // 策略 ID
+			"st": "GRID", // 策略类型
+			"ss": "WORKING", // 策略状态
+			"s": "BTCUSDT", // 交易对
+			"r": "-0.00300716", // 已实现 PNL
+			"up": "16720", // 未配对均价
+			"uq": "-0.001", // 未配对数量
+			"uf": "-0.00300716", // 未配对手续费
+			"mp": "0.0", // 已配对 PNL
+			"ut": 1669262908197 // 更新时间
+		}
+}
+
+
+
+条件订单(TP/SL)触发后拒绝更新推送
+事件描述
+CONDITIONAL_ORDER_TRIGGER_REJECT 在止盈止损单触发后被拒绝时推送
+
+事件类型
+CONDITIONAL_ORDER_TRIGGER_REJECT
+
+响应示例
+{
+    "e":"CONDITIONAL_ORDER_TRIGGER_REJECT",      // 事件类型
+    "E":1685517224945,      // 事件时间
+    "T":1685517224955,      // 撮合时间
+    "or":{
+      "s":"ETHUSDT",      // 交易对
+      "i":155618472834,      // 订单号
+      "r":"Due to the order could not be filled immediately, the FOK order has been rejected. The order will not be recorded in the order history",      // 拒绝原因
+     }
+}

@@ -1,0 +1,68 @@
+非boost版本与原始版本代码逻辑对比结果
+===========================================
+
+1. 代码逻辑差异分析
+-------------------
+
+1.1 非boost版本 (crypto.hpp)
+- 加密算法: TwoFish
+- 密钥处理: 使用SHA256对密钥进行哈希处理
+- 加密模式: CBC模式
+- 填充方式: PKCS7填充
+- Base64编码: 自定义实现
+
+1.2 原始版本 (encode_orgi.cpp)
+- 加密算法: BlowFish
+- 密钥处理: 直接使用原始密钥，截断或填充到算法要求长度
+- 加密模式: ECB模式
+- 填充方式: 空格填充
+- Base64编码: Boost库实现
+
+2. main.cpp调用方式分析
+----------------------
+
+两个版本的main.cpp调用方式基本一致：
+- 都使用命令行参数解析
+- 都支持 -Encrypt 和 -Decrypt 操作
+- 都接受密钥和数据作为参数
+- 都输出Base64格式的结果
+
+主要差异在于底层实现的加密算法和处理方式不同。
+
+3. 使用大写BINANCE密钥的测试结果
+-------------------------------
+
+3.1 非boost版本测试结果:
+- 加密输入: "OccPINwmRzJQIMhj1rCwtDuuYxCs1zDlcJnU2IGEjfIbhm7tEeifTYDXYqDbg2Of"
+- 加密输出: Base64:4gAvRkm99lRG1pY9oeU9fB5UT9ow+ftwdraedzc9x2oU5g6noN+0J1aZ6+ArNKf51Wb06TPMJZEan+ip8eSWvsdlLCaOMTqOviSMMRp8X40=
+- 解密验证: ✓ 成功解密回原始数据
+
+3.2 原始版本测试结果:
+- 加密输入: "OccPINwmRzJQIMhj1rCwtDuuYxCs1zDlcJnU2IGEjfIbhm7tEeifTYDXYqDbg2Of"
+- 加密输出: Base64:Mm2Okq2Pdb0hvoiE6CjHtqG2mpvB/s/sANEytOcC0mAcSA2KFjelGrek868lnLcI+4bF3EFiT59V/qmUn/UGyA==
+
+4. 加解密结果一致性对比
+---------------------
+
+结果: ✗ 不一致
+
+原因分析:
+1. 加密算法不同: TwoFish vs BlowFish
+2. 密钥处理方式不同: SHA256哈希 vs 直接使用
+3. 加密模式不同: CBC vs ECB
+4. 填充方式不同: PKCS7 vs 空格填充
+5. Base64实现不同: 自定义 vs Boost库
+
+5. 结论
+-------
+
+非boost版本(crypto.hpp)和原始版本(encode_orgi.cpp)虽然都能正常工作，但由于采用了完全不同的加密算法和实现方式，它们产生的加密结果完全不同，无法互相兼容。
+
+这两个版本实际上是两套独立的加密系统：
+- 非boost版本: 更现代的TwoFish+CBC+PKCS7组合
+- 原始版本: 传统的BlowFish+ECB+空格填充组合
+
+如果需要保持兼容性，必须选择其中一种实现方式，不能混用。
+
+测试时间: $(date)
+测试环境: Linux

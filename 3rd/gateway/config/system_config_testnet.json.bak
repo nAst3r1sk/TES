@@ -1,0 +1,121 @@
+{
+  "system": {
+    "name": "TES - Trading Execution Service",
+    "version": "1.0.0",
+    "max_threads": 8,
+    "signaltrans_mode": 1,
+    "description": "Signal trans mode: 0=shared memory, 1=json file",
+      "json_file_config": {
+        "position_file": "./config/pos_update.json",
+        "update_interval_ms": 100,
+        "tolerance_threshold": 1.0,
+        "enable_auto_sync": true
+      },
+      "shared_memory_config": {
+        "buffer_size": 1024,
+        "max_signals": 1000,
+        "signal_buffer_size": 10000,
+        "order_report_buffer_size": 10000,
+        "cleanup_interval_ms": 60000
+      },
+      "json_feedback_config": {
+        "output_directory": "./result",
+        "filename_prefix": "order_feedback",
+        "append_timestamp": true,
+        "single_file_mode": false,
+        "max_file_size_mb": 10,
+        "max_entries_per_file": 1000,
+        "pretty_print": true
+      },
+      "position_sync_config": {
+        "precision_tolerance": 0.000001,
+        "max_position_diff": 0.000001,
+        "sync_timeout_ms": 5000
+      }
+  },
+  "gateway": {
+    "market_data": [
+      "binance"
+    ],
+    "trading_exchanges": [
+      "binance"
+    ],
+    "trading_type": [
+      "futures"
+    ],
+    "description": "Supported types: binance, okx, gateio, bybit"
+  },
+  "exchanges": {
+    "binance": {
+      "api_key": "qkc17tMiKRQuuioANehvtn1rmZixbMik2f3cl5cBDGTfQ6Qbzk78AooFaQgBsR6U",
+      "api_secret": "eLCzE2hz4ZLyq8j5IPbJnyzJZpIxc4eQpLiohYK2wqv0J20LFOQbZV9Df6tU5s3u",
+      "base_urls": {
+        "spot": {
+          "live": "wss://ws-api.binance.com:443/ws-api/v3",
+          "testnet": "wss://ws-api.testnet.binance.vision/ws-api/v3"
+        },
+        "futures": {
+          "live": "wss://ws-fapi.binance.com/ws-fapi/v1",
+          "testnet": "wss://testnet.binancefuture.com/ws-fapi/v1"
+        }
+      },
+      "testnet": true,
+      "sync_interval_ms": 100,
+      "timeout_ms": 5000
+    },
+    "okx": {
+      "api_key": "",
+      "secret_key": "",
+      "passphrase": "",
+      "base_url": "https://www.okx.com"
+    },
+    "gateio": {
+      "api_key": "",
+      "secret_key": "",
+      "base_url": "https://api.gateio.ws"
+    },
+    "bybit": {
+      "api_key": "",
+      "secret_key": "",
+      "base_url": "https://api.bybit.com"
+    }
+  },
+  "execution": {
+    "worker_thread_count": 4,
+    "signal_processing_interval_ms": 0.1,
+    "heartbeat_interval_ms": 1000,
+    "statistics_update_interval_ms": 5000,
+    "twap_algorithm": {
+      "quantity_threshold": 10000.0,
+      "value_threshold": 1000000.0,
+      "market_impact_threshold": 0.05,
+      "default_duration_minutes": 30,
+      "min_slice_size": 100.0,
+      "max_slices": 200,
+      "default_participation_rate": 0.2,
+      "max_price_deviation_bps": 50
+    }
+  },
+
+  "market_data": {
+    "update_interval_ms": 100,
+    "price_volatility": 0.05,
+    "volume_volatility": 0.2,
+    "spread_ratio": 0.001,
+    "manager": {
+      "cache_expiry_ms": 5000,
+      "websocket_reconnect_interval_ms": 1000,
+      "max_reconnect_attempts": 10,
+      "data_validation_enabled": true,
+      "async_refresh_enabled": true,
+      "default_instruments": ["BTCUSDT", "ETHUSDT", "BNBUSDT"]
+    }
+  },
+  "logging": {
+    "file": "logs/trading.log",
+    "console": true,
+    "max_file_size_mb": 100,
+    "max_files": 10,
+    "async_logging": true
+  }
+}

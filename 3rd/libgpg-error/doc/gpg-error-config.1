@@ -1,0 +1,62 @@
+.\" Created from Texinfo source by yat2m 1.56
+.TH GPG-ERROR-CONFIG 1 2025-10-27 "Libgpg-error 1.56" "GnuPG"
+.SH NAME
+.B gpg-error-config
+\- Script to get information about the installed version of libgpg-error
+.SH SYNOPSIS
+.B  gpg-error-config
+.RI [ options ]
+
+.SH DESCRIPTION
+\fBgpg\-error\-config\fP is a tool that is used to configure to
+determine the compiler and linker flags that should be used to compile
+and link programs that use Libgpg-error.
+
+This tool is now obsolete.  Instead, please use pkg-config with
+gpg-error.pc for your new program, or use gpg-error.m4 which uses
+gpgrt-config and gpg-error.pc internally.
+
+.SH OPTIONS
+
+\fBgpg\-error\-config\fP accepts the following options:
+
+
+.TP
+.B   \-\-mt
+Provide output appropriate for multithreaded programs.  \fB\-\-mt\fP
+is only useful when combined with other options, and must be the first
+option if present.
+
+.TP
+.B  \-\-version
+Print the currently installed version of Libgpg-error on the
+standard output.
+
+.TP
+.B  \-\-libs
+Print the linker flags that are necessary to link a program using
+Libgpg-error.
+
+.TP
+.B  \-\-cflags
+Print the compiler flags that are necessary to compile a program using
+Libgpg-error.
+
+.TP
+.B  \-\-prefix=\fIprefix\fP
+If specified, use \fIprefix\fP instead of the installation prefix that
+Libgpg-error was built with when computing the output for the
+\fB\-\-cflags\fP and \fB\-\-libs\fP options.  This option is also
+used for the exec prefix if \fB\-\-exec\-prefix\fP was not specified.
+This option must be specified before any \fB\-\-libs\fP or
+\fB\-\-cflags\fP options.
+
+.TP
+.B  \-\-exec\-prefix=\fIprefix\fP
+If specified, use \fIprefix\fP instead of the installation exec prefix
+that Libgpg-error was built with when computing the output for the
+\fB\-\-cflags\fP and \fB\-\-libs\fP options.  This option must be
+specified before any \fB\-\-libs\fP or \fB\-\-cflags\fP options.
+
+.P
+
