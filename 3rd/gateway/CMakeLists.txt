@@ -19,7 +19,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # 使用主项目的第三方库路径
-set(MAIN_3RD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../)
+set(MAIN_3RD_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../)
 include_directories(${MAIN_3RD_DIR}/yyjson/src)
 include_directories(${MAIN_3RD_DIR}/IXWebSocket)
 include_directories(${MAIN_3RD_DIR}/RxCpp/Rx/v2/src)
