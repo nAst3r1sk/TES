@@ -134,12 +134,8 @@ set_target_properties(trading_system_gateway PROPERTIES
     BUILD_WITH_INSTALL_RPATH TRUE
 )
 
-add_executable(test_decrypt test_decrypt.cpp)
-target_link_libraries(test_decrypt 
-    gcrypt
-    gpg-error
-)
-
-# 添加加密工具程序
-add_executable(encrypt_api_keys encrypt_api_keys.cpp)
-target_link_libraries(encrypt_api_keys gcrypt gpg-error)
+# 测试和工具程序已移除编译配置
+# add_executable(test_decrypt test_decrypt.cpp)
+# target_link_libraries(test_decrypt gcrypt gpg-error)
+# add_executable(encrypt_api_keys encrypt_api_keys.cpp)
+# target_link_libraries(encrypt_api_keys gcrypt gpg-error)
